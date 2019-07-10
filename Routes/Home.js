@@ -1,4 +1,4 @@
-const PlayRoulette = require("../Utils/PlayRoulette.mjs");
+const PlayRoulette = require("../Utils/PlayRoulette.js");
 const getHistory = require("../Utils/GetHistory.js");
 
 exports.play = () => {

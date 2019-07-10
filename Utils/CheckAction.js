@@ -1,3 +1,5 @@
+const { REPETITION_BEFORE } = require("./Constants");
+
 module.exports = class CheckAction {
   constructor() {
     this.isOddSerie = false;
@@ -13,47 +15,45 @@ module.exports = class CheckAction {
     }
   }
 
-  isOddSerie() {
-    if (
-      (isOdd(this.lastResult[0]) || this.lastResult[0] === 0) &&
-      (isOdd(this.lastResult[1]) || this.lastResult[1] === 0) &&
-      (isOdd(this.lastResult[2]) || this.lastResult[2] === 0)
-    ) {
-      this.isOddSerie = true;
-      return true;
-    } else {
-      this.isOddSerie = false;
-      return false;
+  checkOddSerie() {
+    for (let i = 0; i < REPETITION_BEFORE; i++) {
+      if (!this.isOdd(this.lastResult[i]) && this.lastResult[i] !== 0) {
+        this.isOddSerie = false;
+        return false;
+      }
     }
+    this.isOddSerie = true;
+    return true;
   }
 
-  isEvenSerie() {
-    if (
-      (!isOdd(this.lastResult[0]) || this.lastResult[0] === 0) &&
-      (!isOdd(this.lastResult[1]) || this.lastResult[1] === 0) &&
-      (!isOdd(this.lastResult[2]) || this.lastResult[2] === 0)
-    ) {
-      this.isEvenSerie = true;
-      return true;
-    } else {
-      this.isEvenSerie = false;
-      return false;
+  checkEvenSerie() {
+    for (let i = 0; i < REPETITION_BEFORE; i++) {
+      if (this.isOdd(this.lastResult[i]) && this.lastResult[i] !== 0) {
+        this.isEvenSerie = false;
+        return false;
+      }
     }
+    this.isEvenSerie = true;
+    return true;
   }
 
   isWinner(actualResult) {
     if (
-      (this.isEvenSerie && actualResult !== 0 && !this.isOdd(actualResult)) ||
-      (this.isOddSerie && actualResult !== 0 && this.isOdd(actualResult))
+      (this.isEvenSerie && actualResult !== 0 && this.isOdd(actualResult)) ||
+      (this.isOddSerie && actualResult !== 0 && !this.isOdd(actualResult))
     ) {
+      console.log("++++ winnner ++++");
       return true;
     } else {
+      console.log("---- loser ----");
       return false;
     }
   }
 
   isSerie(lastResult) {
     this.lastResult = lastResult;
+    this.checkEvenSerie();
+    this.checkOddSerie();
     if (this.isEvenSerie || this.isOddSerie) {
       return true;
     } else {
